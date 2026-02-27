@@ -1,0 +1,44 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum ServiceType {
+  MANUTENCAO
+  INSTALACAO
+  LIMPEZA
+  VISITA_TECNICA
+  ORCAMENTO
+  OUTRO
+}
+
+enum ServiceStatus {
+  AGENDADO
+  CONCLUIDO
+  CANCELADO
+}
+
+model Service {
+  id               Int           @id @default(autoincrement())
+  nomeCliente      String
+  telefoneCliente  String?
+  tipoServico      ServiceType
+  dataServico      DateTime
+  horaInicio       String
+  horaFim          String
+  localServico     String
+  enderecoCompleto String
+  valorServico     Float
+  observacoes      String?
+  status           ServiceStatus @default(AGENDADO)
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  @@index([dataServico, horaInicio, horaFim])
+  @@index([nomeCliente])
+  @@index([status])
+}
